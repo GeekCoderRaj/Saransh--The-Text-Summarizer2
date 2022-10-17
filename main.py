@@ -17,6 +17,12 @@ import urllib.request
 from fetch_subtitle_from_yout import fetch
 from text_to_speech import speech
 
+#import module from Daisi platform
+import pydaisi as pyd
+
+gpt_3_title_extraction_from_text = pyd.Daisi(
+    "laiglejm/GPT 3 Title extraction from text")
+
 secret_key = os.environ['secret_key']
 convertapi.api_secret = secret_key
 API_KEY = os.environ['API_KEY']
@@ -43,6 +49,7 @@ OPENAI_API_KEY = my_secret
 openai.api_key = OPENAI_API_KEY
 
 
+#function for extract input
 def extract_input_text(file_object):
     text = ""
     with pdfplumber.open(file_object) as pdf:
@@ -74,6 +81,7 @@ def showPaperSummary(input_text):
     return post_processing(response_text=batch_summary)
 
 
+#function for summarization
 def summ_batches(input_text):
     sentences = nltk.tokenize.sent_tokenize(input_text)
     tokens = 0
@@ -96,17 +104,29 @@ def summ_batches(input_text):
     return summary
 
 
+#use api title_extraction_from_text from Daisi platform
+def get_title(input_text):
+    title = gpt_3_title_extraction_from_text.get_title(input_text,
+                                                       OPENAI_API_KEY).value
+    return title['title']
+
+
+#function for summarize text
 def text_summarize(message):
     a = jsonpickle.encode(message.text)
+    title = "Title : "
+    title += get_title(a)
     a = summ_batches(a)
     a = a.replace('\n', "")
     speech(a)
+    bot.send_message(message.chat.id, title)
     bot.send_message(message.chat.id, a)
     bot.send_audio(message.chat.id, audio=open('output.mp3', 'rb'))
 
     bot.send_message(message.chat.id, "Press any key for further work\n")
 
 
+#function for summarize text
 def pdf_summarize(message):
     file_id = message.document.file_id
     path = bot.get_file_url(file_id)
@@ -117,10 +137,13 @@ def pdf_summarize(message):
     for line in data:
         line = str(line)
         a += line
+    title = "Title : "
+    title += get_title(a)
     a = summ_batches(a)
     a = a.replace('\n', "")
     a = a.replace('\r', "")
     speech(a)
+    bot.send_message(message.chat.id, title)
     bot.send_message(message.chat.id, a)
     bot.send_audio(message.chat.id, audio=open('output.mp3', 'rb'))
     bot.send_message(message.chat.id, "Press any key for further work\n")
@@ -132,14 +155,17 @@ def get_video_id(videoURL):
     return videoID
 
 
+#function to summarize the subtitle of youtube
 def subtitle_summarize(message):
     a = jsonpickle.encode(message.text)
     a = get_video_id(a)
-    print("hi", a)
     a = fetch(a)
+    title = "Title : "
+    title += get_title(a)
     a = summ_batches(a)
     a = a.replace('\n', "")
     speech(a)
+    bot.send_message(message.chat.id, title)
     bot.send_message(message.chat.id, a)
     bot.send_audio(message.chat.id, audio=open('output.mp3', 'rb'))
     bot.send_message(message.chat.id, "Press any key for further work\n")
