@@ -22,18 +22,21 @@ In this project, we have made an automatic text summarizzer which summarizes dif
 
 You need to import these libraries, if not downloaded use pip install
 ```bash
-import openai
-import wget
-import pathlib
-import pdfplumber
-import numpy as np
-from flask import Flask,request,Response
-import requests
-import json
-import nltk
-from flask_sslify import SSLify
-import os
-nltk.download('punkt')
+# Automatically generated PIP requirements
+numpy
+requests
+convertapi
+gtts
+jsonpickle
+nltk
+openai
+pdfplumber
+pydaisi
+PyPDF2
+pyTelegramBotAPI
+wget
+youtube_transcript_api
+
 ```
 ## Tests
 
