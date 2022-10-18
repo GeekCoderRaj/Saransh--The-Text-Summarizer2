@@ -23,9 +23,9 @@ import pydaisi as pyd
 gpt_3_title_extraction_from_text = pyd.Daisi(
     "laiglejm/GPT 3 Title extraction from text")
 
-secret_key = os.environ['secret_key']
+secret_key = "dzOGx9zbm6P1R9rp"
 convertapi.api_secret = secret_key
-API_KEY = os.environ['API_KEY']
+API_KEY = "5114610602:AAH9Rz3PhTqgqGu8h6GvC8GgzE_gW9SHms0"
 bot = telebot.TeleBot(API_KEY)
 # speech()
 
@@ -44,8 +44,8 @@ SUMMARIZE_PREFIX = "Summarize this for a second-grade student:\n\n"
 ENGINE = "text-curie-001"
 BATCH_SIZE = 500
 NUM_TOKENS = 125
-my_secret = os.environ['openapikey']
-OPENAI_API_KEY = my_secret
+# my_secret = os.environ['openapikey']
+OPENAI_API_KEY = "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"
 openai.api_key = OPENAI_API_KEY
 
 
